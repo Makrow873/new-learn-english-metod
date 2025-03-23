@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelime Testi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        h2 {
+            font-size: 22px;
+            color: #333;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            margin-bottom: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            background: #4facfe;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 5px;
+        }
+        button:hover {
+            background: #00c2fe;
+        }
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Kelime Listeni Gir</h2>
+        <textarea id="wordList" placeholder="Örnek:\nbe together - birlikte olmak\nbecome friends - arkadaş olmak"></textarea>
+        <button id="startQuiz">Teste Başla</button>
+        <h2 id="question" style="display: none;"></h2>
+        <input type="text" id="answer" placeholder="Kelimenin İngilizcesini yaz" style="display: none;">
+        <button id="submit" style="display: none;">Gönder</button>
+        <p id="result"></p>
+    </div>
+    <script>
+        let words = [];
+        let currentIndex = 0;
+
+        document.getElementById("startQuiz").addEventListener("click", function() {
+            const inputText = document.getElementById("wordList").value.trim();
+            words = inputText.split("\n").map(line => {
+                const parts = line.split(" - ");
+                return { english: parts[0].trim(), turkish: parts[1].trim() };
+            }).filter(word => word.english && word.turkish);
+            
+            if (words.length === 0) {
+                alert("Lütfen geçerli bir kelime listesi girin!");
+                return;
+            }
+            
+            document.getElementById("wordList").style.display = "none";
+            document.getElementById("startQuiz").style.display = "none";
+            document.getElementById("question").style.display = "block";
+            document.getElementById("answer").style.display = "block";
+            document.getElementById("submit").style.display = "block";
+            showQuestion();
+        });
+
+        function showQuestion() {
+            if (currentIndex >= words.length) {
+                document.getElementById("question").innerText = "Tebrikler! Tüm kelimeleri tamamladın.";
+                document.getElementById("answer").style.display = "none";
+                document.getElementById("submit").style.display = "none";
+                return;
+            }
+            document.getElementById("question").innerText = words[currentIndex].turkish;
+            document.getElementById("answer").value = "";
+            document.getElementById("answer").focus();
+        }
+
+        document.getElementById("submit").addEventListener("click", checkAnswer);
+        document.getElementById("answer").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkAnswer();
+            }
+        });
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
+            const correctAnswer = words[currentIndex].english.toLowerCase();
+            const resultText = document.getElementById("result");
+            
+            if (userAnswer === correctAnswer) {
+                resultText.innerText = "✅ Doğru!";
+                resultText.style.color = "green";
+            } else {
+                resultText.innerText = `❌ Yanlış! Doğru cevap: ${words[currentIndex].english}`;
+                resultText.style.color = "red";
+            }
+            
+            setTimeout(() => {
+                resultText.innerText = "";
+                currentIndex++;
+                showQuestion();
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
