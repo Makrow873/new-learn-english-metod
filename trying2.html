@@ -80,7 +80,7 @@
     </div>
     <script>
         let words = [];
-        let currentIndex = 0;
+        let currentWord = {};
 
         document.getElementById("startQuiz").addEventListener("click", function() {
             const inputText = document.getElementById("wordList").value.trim();
@@ -103,13 +103,16 @@
         });
 
         function showQuestion() {
-            if (currentIndex >= words.length) {
+            if (words.length === 0) {
                 document.getElementById("question").innerText = "Tebrikler! Tüm kelimeleri tamamladın.";
                 document.getElementById("answer").style.display = "none";
                 document.getElementById("submit").style.display = "none";
                 return;
             }
-            document.getElementById("question").innerText = words[currentIndex].turkish;
+            const randomIndex = Math.floor(Math.random() * words.length);
+            currentWord = words[randomIndex];
+            words.splice(randomIndex, 1);
+            document.getElementById("question").innerText = currentWord.turkish;
             document.getElementById("answer").value = "";
             document.getElementById("answer").focus();
         }
@@ -123,20 +126,19 @@
 
         function checkAnswer() {
             const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
-            const correctAnswer = words[currentIndex].english.toLowerCase();
+            const correctAnswer = currentWord.english.toLowerCase();
             const resultText = document.getElementById("result");
             
             if (userAnswer === correctAnswer) {
                 resultText.innerText = "✅ Doğru!";
                 resultText.style.color = "green";
             } else {
-                resultText.innerText = `❌ Yanlış! Doğru cevap: ${words[currentIndex].english}`;
+                resultText.innerText = `❌ Yanlış! Doğru cevap: ${currentWord.english}`;
                 resultText.style.color = "red";
             }
             
             setTimeout(() => {
                 resultText.innerText = "";
-                currentIndex++;
                 showQuestion();
             }, 2000);
         }
