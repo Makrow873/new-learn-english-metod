@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Groq API Chat Completion</title>
+    <title>Sentence Quiz</title>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -48,7 +48,12 @@
             border-color: #0077cc;
             outline: none;
         }
-    
+        .sentence{
+            text-align: center;
+        }
+        .result{
+            text-align: left;
+        }
         .sentence, textarea, .result {
             background: #ffffff;
             padding: 1.5rem;
@@ -56,7 +61,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             width: 90%;
             max-width: 600px;
-            text-align: center;
             margin: 1rem 0;
             font-size: 1.1rem;
             line-height: 1.6;
@@ -64,6 +68,7 @@
         }
     
         textarea {
+            text-align: left;
             height: 120px;
             resize: none;
             padding: 1rem;
@@ -141,7 +146,6 @@
     
             .sentence, textarea, .result {
                 width: 80%;
-                text-align: left;
             }
     
             button {
